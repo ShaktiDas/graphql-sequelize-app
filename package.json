@@ -1,0 +1,36 @@
+{
+  "name": "graphql-sequelize-app",
+  "version": "1.0.0",
+  "description": "Test app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShaktiDas/graphql-sequelize-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "  ",
+  "bugs": {
+    "url": "https://github.com/ShaktiDas/graphql-sequelize-app/issues"
+  },
+  "homepage": "https://github.com/ShaktiDas/graphql-sequelize-app#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-es2017": "^6.24.1",
+    "webpack": "^2.5.0"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.1",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.4",
+    "pg": "^6.1.5",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.4"
+  }
+}
