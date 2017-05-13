@@ -12,14 +12,76 @@ http.createServer((req, res)=>{
 console.log("Babel is working!");
 
 
-let connection = new Sequelize("demo_sequelize_db",	"root",	"");
+const Connection = new Sequelize("demo_sequelize_db",	"root",	"");
 
-let Article = connection.define('article',{
+//define schema 
+
+//define articles schema 
+const Article = Connection.define('article',{
 	title: Sequelize.STRING,
 	body: Sequelize.TEXT
 });
 
-connection.sync().then(function(){
+
+//define person schema
+const Person = Connection.define('person', {
+	firstName: {
+		type: Sequelize.STRING,
+		allowNull:false
+	},
+	lastName: {
+		type: Sequelize.STRING,
+		allowNull:false
+	},
+	email: {
+		type: Sequelize.STRING,
+		allowNull: false,
+		validate: {
+			isEmail: true
+		}
+	}
+
+});
+
+//define post schema
+const Post = Connection.define('post',{
+	title:{
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	content: {
+		type: Sequelize.STRING,
+		allowNull:false
+	}
+
+});
+
+//define relationships
+
+Person.hasMany(Post);
+Post.belongsTo(Person);
+
+Connection.sync({force: true}).then(()=>{
+
+
+	//create some fake person and posts
+
+	_.times(10, ()=> {
+    return Person.create({
+      firstName: Faker.name.firstName(),
+      lastName: Faker.name.lastName(),
+      email: Faker.internet.email()
+    }).then(person => {
+	      return person.createPost({
+	        title: `Sample post by ${person.firstName}`,
+	        content: 'here is some content'
+	      });
+	    });
+	  });
+
+});
+/*
+Connection.sync().then(function(){
 
 	//insert new row in database.
 
@@ -46,6 +108,7 @@ connection.sync().then(function(){
 
 
 	//crate a demo row if there is no data in the database..
+	/*
 	Article.findAll().then(function(articles){
 		
 		console.log("Found", articles.length, "articles.");
@@ -60,4 +123,8 @@ connection.sync().then(function(){
 
 
 });
+
+*/
+
+export default Connection;
 
