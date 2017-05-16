@@ -88,10 +88,22 @@ const Query = new GraphQLObjectType({
           },
           email: {
             type: GraphQLString
+          },
+          orderBy:{
+            type: new GraphQLList( new GraphQLList(GraphQLString))
           }
         },
         resolve (root, args) {
-          return Db.models.person.findAll({ where: args });
+          let query = {};
+
+          if(args.orderBy){
+            query.order = args.orderBy;
+            delete args.orderBy;
+          }
+
+          query.where = args;
+
+          return Db.models.person.findAll(query);
         }
       },
       posts: {

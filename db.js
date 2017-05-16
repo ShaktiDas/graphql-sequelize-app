@@ -6,12 +6,6 @@ const Connection = new Sequelize("demo_sequelize_db",	"root",	"");
 
 //define schema 
 
-//define articles schema 
-const Article = Connection.define('article', {
-	title: Sequelize.STRING,
-	body: Sequelize.TEXT
-});
-
 
 //define person schema
 const Person = Connection.define('person', {
