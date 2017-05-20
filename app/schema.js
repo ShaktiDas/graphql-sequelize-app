@@ -2,74 +2,64 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull
 } from 'graphql';
 
-import Db from './db';
+import Sequelize from 'sequelize';
+import {resolver} from 'graphql-sequelize';
+import _ from 'lodash';
 
-const Post = new GraphQLObjectType({
-  name: 'Post',
-  description: 'Blog post',
+import {
+  Connection, 
+  DBSchema
+} from './db';
+
+let GraphqlSchema = {};
+
+
+GraphqlSchema.Contact = new GraphQLObjectType({
+  name: 'Contact',
+  description: 'Contact schema',
   fields () {
     return {
-      title: {
-        type: GraphQLString,
-        resolve (post) {
-          return post.title;
-        }
+      firstName: {
+        type: GraphQLString
       },
-      content: {
-        type: GraphQLString,
-        resolve (post) {
-          return post.content;
-        }
+      lastName:{
+        type: GraphQLString
       },
-      person: {
-        type: Person,
-        resolve (post) {
-          return post.getPerson();
-        }
+      email:{
+        type: GraphQLString
       }
     };
   }
 });
 
-const Person = new GraphQLObjectType({
-  name: 'Person',
-  description: 'This represents a Person',
-  fields: () => {
+GraphqlSchema.Product = new GraphQLObjectType({
+  name: 'Product',
+  description: 'Product schema',
+  fields () {
     return {
-      id: {
-        type: GraphQLInt,
-        resolve (person) {
-          return person.id;
-        }
+      name: {
+        type: GraphQLString
       },
-      firstName: {
-        type: GraphQLString,
-        resolve (person) {
-          return person.firstName;
-        }
-      },
-      lastName: {
-        type: GraphQLString,
-        resolve (person) {
-          return person.lastName;
-        }
-      },
-      email: {
-        type: GraphQLString,
-        resolve (person) {
-          return person.email;
-        }
-      },
-      posts: {
-        type: new GraphQLList(Post),
-        resolve (person) {
-          return person.getPosts();
-        }
+      price:{
+        type: GraphQLFloat
+      }
+    };
+  }
+});
+
+GraphqlSchema.Category = new GraphQLObjectType({
+  name: 'Contact',
+  description: 'Contact schema',
+  fields () {
+    return {
+     name: {
+        type: GraphQLString
       }
     };
   }
@@ -80,42 +70,37 @@ const Query = new GraphQLObjectType({
   description: 'Root query object',
   fields: () => {
     return {
-      people: {
-        type: new GraphQLList(Person),
+      products: {
+        type: new GraphQLList(GraphqlSchema.Product),
         args: {
           id: {
             type: GraphQLInt
           },
-          email: {
+          name: {
             type: GraphQLString
           },
           orderBy:{
             type: new GraphQLList( new GraphQLList(GraphQLString))
           }
         },
-        resolve (root, args) {
-          let query = {};
-
-          if(args.orderBy){
-            query.order = args.orderBy;
-            delete args.orderBy;
+        resolve: resolver(DBSchema.Product, {
+          before: (opts, args)=>{
+            const options = _.extend({order: []}, opts);
+            console.log(options);
+            if(args.orderBy){
+              options.order = options.order.concat(args.orderBy);
+            }
+               console.log(options);
+            return options;
           }
-
-          query.where = args;
-
-          return Db.models.person.findAll(query);
-        }
-      },
-      posts: {
-        type: new GraphQLList(Post),
-        resolve (root, args) {
-          return Db.models.post.findAll({ where: args });
-        }
+        })
       }
     };
   }
 });
 
+
+/*
 const Mutation = new GraphQLObjectType({
   name: 'Mutations',
   description: 'Functions to set stuff',
@@ -146,9 +131,11 @@ const Mutation = new GraphQLObjectType({
   }
 });
 
+*/
+
 const Schema = new GraphQLSchema({
   query: Query,
-  mutation: Mutation
+  //mutation: Mutation
 });
 
 export default Schema;

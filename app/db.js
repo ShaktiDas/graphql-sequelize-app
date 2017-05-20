@@ -7,8 +7,12 @@ const Connection = new Sequelize("demo_sequelize_db",	"root",	"");
 //define schema 
 
 
-//define person schema
-const Person = Connection.define('person', {
+//define contact schema
+
+let DBSchema = {};
+
+
+DBSchema.Contact = Connection.define('contact', {
 	firstName: {
 		type: Sequelize.STRING,
 		allowNull:false
@@ -27,46 +31,73 @@ const Person = Connection.define('person', {
 
 });
 
-//define post schema
-const Post = Connection.define('post', {
-	title:{
+//define product schema
+DBSchema.Product = Connection.define('product', {
+	name:{
 		type: Sequelize.STRING,
 		allowNull: false
 	},
-	content: {
-		type: Sequelize.STRING,
+	price: {
+		type: Sequelize.DOUBLE,
 		allowNull:false
 	}
 
 });
 
-//define relationships
-
-Person.hasMany(Post);
-Post.belongsTo(Person);
-
-Connection.sync({force: true}).then(()=>{
-
-
-	//create some fake person and posts
-	
-	_.times(10, ()=> {
-    return Person.create({
-      firstName: Faker.name.firstName(),
-      lastName: Faker.name.lastName(),
-      email: Faker.internet.email()
-    }).then(person => {
-	      return person.createPost({
-	        title: `Sample post by ${person.firstName}`,
-	        content: 'here is some content'
-	      });
-	    });
-	  });
-	  
-
+//define catgory schema
+DBSchema.Category = Connection.define('category', {
+	name:{
+		type: Sequelize.STRING,
+		allowNull: false
+	}
 });
 
 
+
+//define relationships
+
+DBSchema.Category.hasMany(DBSchema.Product);
+
+
+//force:true will reset the database. We shouldn't use it in production
+const Sync = () =>{
+	return Connection.sync({force: true})
+};
+
+
+
+//create some demo data
+const createDemoData = () => {
+	return Sync().then(()=>{
+	
+	//create some products
+	
+		_.times(10, ()=> {
+	    	return DBSchema.Product.create({
+	      		name: Faker.name.title(),
+	      		price: 500
+	    	}).then(product => {
+		   	//we'll get the product here  
+		  });
+		});
+
+		_.times(10, ()=> {
+	    	return DBSchema.Category.create({
+	      		name: Faker.random.word()
+	    	}).then(category => {
+		   	//we'll get the category here  
+		  });
+		});
+
+	})
+
+}
+
+
+createDemoData();
+
+
+export {DBSchema};
 export default Connection;
 
 

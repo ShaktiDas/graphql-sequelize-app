@@ -25,5 +25,8 @@
     "lodash": "^4.17.4",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.4"
+  },
+  "dependencies": {
+    "graphql-relay": "^0.5.1"
   }
 }
