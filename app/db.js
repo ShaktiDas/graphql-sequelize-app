@@ -74,8 +74,8 @@ const createDemoData = () => {
 	
 		_.times(10, ()=> {
 	    	return DBSchema.Product.create({
-	      		name: Faker.name.title(),
-	      		price: 500
+	      		name: Faker.commerce.productName(),
+	      		price: Faker.commerce.price()
 	    	}).then(product => {
 		   	//we'll get the product here  
 		  });
