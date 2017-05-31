@@ -8,7 +8,6 @@ import {
   GraphQLNonNull
 } from 'graphql';
 
-import Sequelize from 'sequelize';
 import {resolver} from 'graphql-sequelize';
 import _ from 'lodash';
 
@@ -54,13 +53,19 @@ GraphqlSchema.Product = new GraphQLObjectType({
 });
 
 GraphqlSchema.Category = new GraphQLObjectType({
-  name: 'Contact',
-  description: 'Contact schema',
+  name: 'Category',
+  description: 'Category schema',
   fields () {
     return {
      name: {
         type: GraphQLString
-      }
+     },
+     id: {
+        type: GraphQLInt
+     },
+     createdAt:{
+      type: GraphQLString
+     }
     };
   }
 });
@@ -78,23 +83,19 @@ const Query = new GraphQLObjectType({
           },
           name: {
             type: GraphQLString
-          },
-          orderBy:{
-            type: new GraphQLList( new GraphQLList(GraphQLString))
           }
         },
-        resolve: resolver(DBSchema.Product, {
-          before: (opts, args)=>{
-            const options = _.extend({order: []}, opts);
-            console.log(options);
-            if(args.orderBy){
-              options.order = options.order.concat(args.orderBy);
-            }
-               console.log(options);
-            return options;
-          }
-        })
+        resolve: resolver(DBSchema.Product)
+      },
+      categories:{
+        type: new GraphQLList(GraphqlSchema.Category),
+        resolve: resolver(DBSchema.Category)
+      },
+      contacts:{
+        type: new GraphQLList(GraphqlSchema.Contact),
+        resolve: resolver(DBSchema.Contact)
       }
+
     };
   }
 });

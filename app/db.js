@@ -56,7 +56,9 @@ DBSchema.Category = Connection.define('category', {
 
 //define relationships
 
-DBSchema.Category.hasMany(DBSchema.Product);
+DBSchema.Product.Categories = DBSchema.Product.hasMany(DBSchema.Category, {as: 'categories'});
+
+//DBSchema.Category.Products = DBSchema.Category.hasMany(DBSchema.Product, {as: 'products'});
 
 
 //force:true will reset the database. We shouldn't use it in production
