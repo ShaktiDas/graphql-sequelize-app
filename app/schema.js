@@ -47,6 +47,10 @@ GraphqlSchema.Product = new GraphQLObjectType({
       },
       price:{
         type: GraphQLFloat
+      },
+      categories:{
+        type: new GraphQLList(GraphqlSchema.Category),
+        resolve: resolver(DBSchema.Category)
       }
     };
   }
@@ -65,6 +69,10 @@ GraphqlSchema.Category = new GraphQLObjectType({
      },
      createdAt:{
       type: GraphQLString
+     },
+     products:{
+      type: new GraphQLList(GraphqlSchema.Product),
+      resolve: resolver(DBSchema.Product)
      }
     };
   }

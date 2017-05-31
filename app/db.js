@@ -8,7 +8,7 @@ const Connection = new Sequelize("demo_sequelize_db",	"root",	"");
 
 
 //define contact schema
-
+//Take a look here for sequlize types: http://docs.sequelizejs.com/manual/tutorial/models-definition.html
 let DBSchema = {};
 
 
@@ -40,6 +40,9 @@ DBSchema.Product = Connection.define('product', {
 	price: {
 		type: Sequelize.DOUBLE,
 		allowNull:false
+	},
+	categoryId:{
+		type: Sequelize.INTEGER
 	}
 
 });
@@ -73,16 +76,6 @@ const createDemoData = () => {
 	return Sync().then(()=>{
 	
 	//create some products
-	
-		_.times(10, ()=> {
-	    	return DBSchema.Product.create({
-	      		name: Faker.commerce.productName(),
-	      		price: Faker.commerce.price()
-	    	}).then(product => {
-		   	//we'll get the product here  
-		  });
-		});
-
 		_.times(10, ()=> {
 	    	return DBSchema.Category.create({
 	      		name: Faker.random.word()
@@ -90,6 +83,18 @@ const createDemoData = () => {
 		   	//we'll get the category here  
 		  });
 		});
+
+		_.times(10, ()=> {
+	    	return DBSchema.Product.create({
+	      		name: Faker.commerce.productName(),
+	      		price: Faker.commerce.price(),
+	      		categoryId:_.random(1, 10)
+	    	}).then(product => {
+		   	//we'll get the product here  
+		  });
+		});
+
+		
 
 	})
 
