@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import _ from 'lodash';
 import Faker from 'faker';
 
+
 const Connection = new Sequelize("demo_sequelize_db",	"root",	"");
 
 //define schema 
@@ -40,9 +41,6 @@ DBSchema.Product = Connection.define('product', {
 	price: {
 		type: Sequelize.DOUBLE,
 		allowNull:false
-	},
-	categoryId:{
-		type: Sequelize.INTEGER
 	}
 
 });
@@ -55,11 +53,24 @@ DBSchema.Category = Connection.define('category', {
 	}
 });
 
+DBSchema.Product.Category = DBSchema.Product.belongsTo(DBSchema.Category, {foreignKey: "categoryId"});
+
+
+DBSchema.User = Connection.define('user',{
+  name: Sequelize.STRING
+});
+
+DBSchema.Task = Connection.define('task',{
+  title: Sequelize.STRING
+});
+
+DBSchema.User.Tasks = DBSchema.User.hasMany(DBSchema.Task, {as: "tasks"});
+
 
 
 //define relationships
 
-DBSchema.Product.Categories = DBSchema.Product.hasMany(DBSchema.Category, {as: 'categories'});
+//DBSchema.Product.Categories = DBSchema.Product.hasMany(DBSchema.Category, {as: 'categories'});
 
 //DBSchema.Category.Products = DBSchema.Category.hasMany(DBSchema.Product, {as: 'products'});
 
@@ -76,6 +87,7 @@ const createDemoData = () => {
 	return Sync().then(()=>{
 	
 	//create some products
+		
 		_.times(10, ()=> {
 	    	return DBSchema.Category.create({
 	      		name: Faker.random.word()
@@ -83,14 +95,16 @@ const createDemoData = () => {
 		   	//we'll get the category here  
 		  });
 		});
-
+		
 		_.times(10, ()=> {
 	    	return DBSchema.Product.create({
 	      		name: Faker.commerce.productName(),
 	      		price: Faker.commerce.price(),
 	      		categoryId:_.random(1, 10)
 	    	}).then(product => {
-		   	//we'll get the product here  
+			   	//we'll get the product here  
+			 
+
 		  });
 		});
 
@@ -102,6 +116,7 @@ const createDemoData = () => {
 
 
 createDemoData();
+
 
 
 export {DBSchema};

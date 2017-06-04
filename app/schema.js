@@ -11,6 +11,8 @@ import {
 import {resolver} from 'graphql-sequelize';
 import _ from 'lodash';
 
+import Sequelize from 'sequelize';
+
 import {
   Connection, 
   DBSchema
@@ -37,24 +39,7 @@ GraphqlSchema.Contact = new GraphQLObjectType({
   }
 });
 
-GraphqlSchema.Product = new GraphQLObjectType({
-  name: 'Product',
-  description: 'Product schema',
-  fields () {
-    return {
-      name: {
-        type: GraphQLString
-      },
-      price:{
-        type: GraphQLFloat
-      },
-      categories:{
-        type: new GraphQLList(GraphqlSchema.Category),
-        resolve: resolver(DBSchema.Category)
-      }
-    };
-  }
-});
+
 
 GraphqlSchema.Category = new GraphQLObjectType({
   name: 'Category',
@@ -78,6 +63,82 @@ GraphqlSchema.Category = new GraphQLObjectType({
   }
 });
 
+GraphqlSchema.Product = new GraphQLObjectType({
+  name: 'Product',
+  description: 'Product schema',
+  fields () {
+    return {
+      name: {
+        type: GraphQLString
+      },
+      price:{
+        type: GraphQLFloat
+      },
+      categories:{
+        type: new GraphQLList(GraphqlSchema.Category) ,
+        resolve: resolver(DBSchema.Category)
+      },
+      productCategory:{
+        type: GraphqlSchema.Category,
+        resolve: resolver(DBSchema.Category)
+      }
+    };
+  }
+});
+
+
+
+
+
+
+
+////////////////////
+
+
+
+let taskType = new GraphQLObjectType({
+  name: 'Task',
+  description: 'A task',
+  fields:{
+    id:{
+      type: new GraphQLNonNull(GraphQLInt),
+      description: "Task id"
+    },
+    title:{
+      type: GraphQLString,
+      description: "Task description"
+    }
+  }
+});
+
+let userType = new GraphQLObjectType({
+  name: "User",
+  description: "A user",
+  fields:{
+    id:{
+      type: new GraphQLNonNull(GraphQLInt),
+      description: "User Id"
+    },
+    name:{
+      type: GraphQLString,
+      description: "User name"
+    },
+    tasks:{
+      type: new GraphQLList(taskType),
+      resolve: resolver(DBSchema.User.Tasks)
+    }
+  }
+
+});
+
+/////////////////
+
+
+
+
+
+
+
 const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'Root query object',
@@ -91,6 +152,12 @@ const Query = new GraphQLObjectType({
           },
           name: {
             type: GraphQLString
+          },
+          limit:{
+            type: GraphQLInt
+          },
+          order:{
+            type: GraphQLString
           }
         },
         resolve: resolver(DBSchema.Product)
@@ -102,6 +169,18 @@ const Query = new GraphQLObjectType({
       contacts:{
         type: new GraphQLList(GraphqlSchema.Contact),
         resolve: resolver(DBSchema.Contact)
+      },
+      users:{
+        type: new GraphQLList(userType),
+        args:{
+          limit:{
+            type: GraphQLInt
+          },
+          order:{
+            type: GraphQLString
+          }
+        },
+        resolve: resolver(DBSchema.User)
       }
 
     };
@@ -141,6 +220,13 @@ const Mutation = new GraphQLObjectType({
 });
 
 */
+
+
+
+
+
+
+
 
 const Schema = new GraphQLSchema({
   query: Query,
