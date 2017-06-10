@@ -1,8 +1,11 @@
 
 import db from './models';
+import _ from 'lodash';
+import Faker from 'faker';
+import{resolver} from 'graphql-sequelize';
 
 
-/*
+
 
 import {
   GraphQLObjectType,
@@ -14,6 +17,15 @@ import {
   GraphQLNonNull
 } from 'graphql';
 
+
+const Sync = () =>{
+  return db.sequelize.sync({force: true})
+};
+
+
+Sync();
+
+/*
 import {resolver} from 'graphql-sequelize';
 import _ from 'lodash';
 
