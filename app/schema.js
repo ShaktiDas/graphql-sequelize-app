@@ -1,3 +1,9 @@
+
+import db from './models';
+
+
+/*
+
 import {
   GraphQLObjectType,
   GraphQLString,
@@ -74,13 +80,13 @@ GraphqlSchema.Product = new GraphQLObjectType({
       price:{
         type: GraphQLFloat
       },
-      categories:{
-        type: new GraphQLList(GraphqlSchema.Category) ,
-        resolve: resolver(DBSchema.Category)
+      totalProducts:{
+        type: GraphqlSchema.Category ,
+        resolve: resolver(DBSchema.Product.Category)
       },
       productCategory:{
         type: GraphqlSchema.Category,
-        resolve: resolver(DBSchema.Category)
+        resolve: resolver(DBSchema.Product.Category)
       }
     };
   }
@@ -226,7 +232,7 @@ const Mutation = new GraphQLObjectType({
 
 
 
-
+/*
 
 const Schema = new GraphQLSchema({
   query: Query,
@@ -234,3 +240,4 @@ const Schema = new GraphQLSchema({
 });
 
 export default Schema;
+*/

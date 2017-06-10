@@ -13,7 +13,7 @@ app.get('/',function(req, res){
 });
 
 // GraphQL
-app.use('/graphql', GraphHTTP({
+app.use('/graphiql', GraphHTTP({
   schema: Schema,
   pretty: true,
   graphiql: true
