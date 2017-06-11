@@ -1,3 +1,5 @@
+'use strict';
+
 import Sequelize from 'sequelize';
 import _ from 'lodash';
 import Faker from 'faker';
@@ -105,6 +107,15 @@ const createDemoData = () => {
 			   	//we'll get the product here  
 			 
 
+		  });
+		});
+
+
+		_.times(10, ()=> {
+	    	return DBSchema.Category.create({
+	      		name: Faker.random.word()
+	    	}).then(category => {
+		   	//we'll get the category here  
 		  });
 		});
 

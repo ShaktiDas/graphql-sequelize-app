@@ -1,9 +1,11 @@
+'use strict';
 
 import db from './models';
 import _ from 'lodash';
 import Faker from 'faker';
 import{resolver} from 'graphql-sequelize';
 
+import graphQlSchema from './schema/index';
 
 
 
@@ -24,6 +26,28 @@ const Sync = () =>{
 
 
 Sync();
+
+
+const Query = new GraphQLObjectType({
+  name: 'Query',
+  description: 'Root query object',
+  fields: () => {
+    return {
+      contacts:{
+        type: new GraphQLList(graphQlSchema.Contact),
+        resolve: resolver(db.Contact)
+      }
+
+    };
+  }
+});
+
+const Schema = new GraphQLSchema({
+  query: Query
+});
+
+export default Schema;
+
 
 /*
 import {resolver} from 'graphql-sequelize';

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (sequlize, DataTypes)=>{
 	const Product = sequlize.define('Product', {
 		name: {

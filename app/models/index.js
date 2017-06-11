@@ -1,8 +1,8 @@
+'use strict';
+
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-import moment from 'moment';
-
 
 //define the database conneciton
 const sequelize = new Sequelize('demo_sequelize_db', 'root', '', {
