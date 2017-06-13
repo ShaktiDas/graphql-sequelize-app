@@ -27,6 +27,8 @@ const Sync = () =>{
 
 Sync();
 
+console.log("graphQlSchema loaded", graphQlSchema);
+
 
 const Query = new GraphQLObjectType({
   name: 'Query',

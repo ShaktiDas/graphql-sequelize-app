@@ -1,16 +1,18 @@
 'use strict';
 
-module.exports = () =>{
+
+import {
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 	
-	const Contact = new GraphQLObjectType({
+
+export const Contact = new GraphQLObjectType({
 	  name: 'Contact',
 	  description: 'Contact schema',
 	  fields () {
 	    return {
-	      firstName: {
-	        type: GraphQLString
-	      },
-	      lastName:{
+	      name: {
 	        type: GraphQLString
 	      },
 	      email:{
@@ -20,5 +22,5 @@ module.exports = () =>{
 	  }
 	});
 
-	return Contact;
-}
+ 
+
